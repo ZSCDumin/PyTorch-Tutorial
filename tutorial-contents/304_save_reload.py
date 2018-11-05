@@ -12,8 +12,11 @@ import matplotlib.pyplot as plt
 # torch.manual_seed(1)    # reproducible
 
 # fake data
-x = torch.unsqueeze(torch.linspace(-1, 1, 100), dim=1)  # x data (tensor), shape=(100, 1)
-y = x.pow(2) + 0.2*torch.rand(x.size())  # noisy y data (tensor), shape=(100, 1)
+# x data (tensor), shape=(100, 1)
+# torch.squeeze() 对于tensor变量进行维度压缩，去除维数为1的的维度。 torch.unsqueeze() 是squeeze()的反向操作，增加一个维度，该维度维数为1，可以指定添加的维度。
+x = torch.unsqueeze(torch.linspace(-1, 1, 100), dim=1)
+# noisy y data (tensor), shape=(100, 1)
+y = x.pow(2) + 0.2*torch.rand(x.size())
 
 # The code below is deprecated in Pytorch 0.4. Now, autograd directly supports tensors
 # x, y = Variable(x, requires_grad=False), Variable(y, requires_grad=False)
@@ -37,7 +40,7 @@ def save():
         optimizer.step()
 
     # plot result
-    plt.figure(1, figsize=(10, 3))
+    plt.figure("保存模型", figsize=(10, 3))
     plt.subplot(131)
     plt.title('Net1')
     plt.scatter(x.data.numpy(), y.data.numpy())
@@ -45,7 +48,8 @@ def save():
 
     # 2 ways to save the net
     torch.save(net1, 'net.pkl')  # save entire net
-    torch.save(net1.state_dict(), 'net_params.pkl')   # save only the parameters
+    # save only the parameters
+    torch.save(net1.state_dict(), 'net_params.pkl')
 
 
 def restore_net():
@@ -78,6 +82,7 @@ def restore_params():
     plt.scatter(x.data.numpy(), y.data.numpy())
     plt.plot(x.data.numpy(), prediction.data.numpy(), 'r-', lw=5)
     plt.show()
+
 
 # save net1
 save()

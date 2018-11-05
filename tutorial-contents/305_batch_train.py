@@ -10,11 +10,11 @@ import torch.utils.data as Data
 
 torch.manual_seed(1)    # reproducible
 
-BATCH_SIZE = 5
+BATCH_SIZE = 8
 # BATCH_SIZE = 8
 
-x = torch.linspace(1, 10, 10)       # this is x data (torch tensor)
-y = torch.linspace(10, 1, 10)       # this is y data (torch tensor)
+x = torch.linspace(1, 10, 50)       # this is x data (torch tensor)
+y = torch.linspace(10, 1, 50)       # this is y data (torch tensor)
 
 torch_dataset = Data.TensorDataset(x, y)
 loader = Data.DataLoader(
@@ -35,4 +35,3 @@ def show_batch():
 
 if __name__ == '__main__':
     show_batch()
-
