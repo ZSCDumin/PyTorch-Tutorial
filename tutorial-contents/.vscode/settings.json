@@ -1,6 +1,6 @@
 {
     "python.pythonPath": "D:\\Anaconda3\\envs\\py36\\python.exe",
-    "editor.fontSize": 12,
-    "editor.wordWrapColumn": 120,
+    "editor.fontSize": 14,
+    "editor.wordWrapColumn": 150,
     "editor.mouseWheelZoom": true
 }
