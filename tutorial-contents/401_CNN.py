@@ -112,6 +112,7 @@ except:
 
 def plot_with_labels(lowDWeights, labels):
     plt.cla()
+
     X, Y = lowDWeights[:, 0], lowDWeights[:, 1]
     for x, y, s in zip(X, Y, labels):
         c = cm.rainbow(int(255 * s / 9))
@@ -129,7 +130,7 @@ for epoch in range(EPOCH):
     # gives batch data, normalize x when iterate train_loader
     for step, (b_x, b_y) in enumerate(train_loader):
 
-        output = cnn(b_x)[0]               # cnn output
+        output = cnn(b_x)[0]            # cnn output
         loss = loss_func(output, b_y)   # cross entropy loss
         optimizer.zero_grad()           # clear gradients for this training step
         loss.backward()                 # backpropagation, compute gradients
@@ -137,6 +138,9 @@ for epoch in range(EPOCH):
 
         if step % 50 == 0:
             test_output, last_layer = cnn(test_x)
+            # torch.max(a,1) 返回每一行中最大值的那个元素，且返回其索引（返回最大元素在这一行的列索引）
+            # torch.max(a,0) 返回每一列中最大值的那个元素，且返回索引（返回最大元素在这一列的行索引）
+            # max()返回最大值及其所在位置的索引，如(value,index)
             pred_y = torch.max(test_output, 1)[1].data.squeeze().numpy()
             accuracy = float((pred_y == test_y.data.numpy()).astype(
                 int).sum()) / float(test_y.size(0))
@@ -144,9 +148,11 @@ for epoch in range(EPOCH):
                   loss.data.numpy(), '| test accuracy: %.2f' % accuracy)
             if HAS_SK:
                 # Visualization of trained flatten layer (T-SNE)
-                tsne = TSNE(perplexity=30, n_components=2,
-                            init='pca', n_iter=5000)
-                plot_only = 500
+                tsne = TSNE(perplexity=30,  # 5-50之间，较大的数据集通常需要更大的perplexity
+                            n_components=2,  # 嵌入式空间的维度
+                            init='pca',  # 初始化方式：random / pca
+                            n_iter=5000)  # 优化的最大迭代次数。至少应该200
+                plot_only = 500  # 只画前500个点
                 low_dim_embs = tsne.fit_transform(
                     last_layer.data.numpy()[:plot_only, :])
                 labels = test_y.numpy()[:plot_only]
@@ -154,7 +160,7 @@ for epoch in range(EPOCH):
 plt.ioff()
 
 # print 10 predictions from test data
-test_output, _ = cnn(test_x[:10])
+test_output, _ = cnn(test_x[:50])
 pred_y = torch.max(test_output, 1)[1].data.numpy().squeeze()
 print(pred_y, 'prediction number')
 print(test_y[:10].numpy(), 'real number')
